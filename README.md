@@ -7,7 +7,7 @@ docker run --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 \
            -p 5432:5432 postgres:11.2
 ```
 
-### Run micronaunt
+### Run micronaut
 ```bash
 ./mvnw mn:run
 ```
