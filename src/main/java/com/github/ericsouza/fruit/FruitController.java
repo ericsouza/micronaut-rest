@@ -2,25 +2,26 @@ package com.github.ericsouza.fruit;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
-import io.reactivex.Single;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.transaction.Transactional;
 
 @Controller("/fruit")
 public class FruitController {
     private final FruitRepository fruitRepository;
 
-    public FruitController(fruitRepository fruitRepository) {
+    public FruitController(FruitRepository fruitRepository) {
         this.fruitRepository = fruitRepository;
     }
 
      // tag::create[]
     @Post("/")
-    Single<Fruit> create(@Valid Fruit Fruit) {
-        return Single.fromPublisher(fruitRepository.save(Fruit));
+    @Transactional
+    Mono<Fruit> create(@Valid Fruit Fruit) {
+        return fruitRepository.save(Fruit);
     }
     // end::create[]
 
@@ -34,20 +35,4 @@ public class FruitController {
     Mono<Fruit> show(Long id) {
         return fruitRepository.findById(id); // <2>
     }
-    // end::read[]
-
-    // tag::update[]
-    @Put("/{id}")
-    Single<Fruit> update(@NotNull Long id, @Valid Fruit Fruit) {
-        return Single.fromPublisher(fruitRepository.update(Fruit));
-    }
-    // end::update[]
-
-    // tag::delete[]
-    @Delete("/{id}")
-    Single<HttpResponse<?>> delete(@NotNull Long id) {
-        return Single.fromPublisher(fruitRepository.deleteById(id))
-                .map(deleted -> deleted > 0 ? HttpResponse.noContent() : HttpResponse.notFound());
-    }
-    // end::delete[]
 }
