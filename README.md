@@ -104,7 +104,7 @@ io.r2dbc.postgresql.client.ReactorNettyClient$PostgresConnectionClosedException:
 ### Run basic load test:
 
 ```
-wrk -t50 -c800 -d30s --latency http://localhost:8080/fruit
+wrk -t12 -c400 -d30s --latency http://localhost:8080/fruit
 ```
 
 ### See the error:
